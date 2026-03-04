@@ -1,3 +1,6 @@
+# catalog_seed.py creates a demo item with modifiers in the Square Sandbox catalog so our monitoring tool has real catalog objects to track.
+# The script uses the Square API to create a test product (pizza) with modifiers (cheese, pepperoni, mushrooms) and sends them to the Sandbox catalog using a batch API request.
+
 import os
 import uuid
 from square import Square
