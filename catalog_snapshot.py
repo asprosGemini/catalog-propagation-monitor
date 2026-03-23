@@ -8,9 +8,9 @@
 #
 # The result is a list of normalized catalog objects that represent a snapshot
 # of the source-of-truth catalog state. This snapshot will later be compared
-# against a simulated downstream catalog index to detect propagation mismatches....
-# test commit to verify git tracking
+# against a simulated downstream catalog index to detect propagation mismatches.
 
+import json
 import os
 from square import Square
 from square.environment import SquareEnvironment
@@ -87,8 +87,15 @@ def build_catalog_snapshot():
 if __name__ == "__main__":
     snapshot = build_catalog_snapshot()
 
+    os.makedirs("snapshots", exist_ok=True)
+    output_path = "snapshots/source_snapshot.json"
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, indent=2)
+
     print("✅ Normalized catalog snapshot built successfully!")
     print(f"Total normalized objects: {len(snapshot)}")
+    print(f"✅ Snapshot saved to: {output_path}")
 
     for obj in snapshot:
         print("\n--- Normalized Object ---")

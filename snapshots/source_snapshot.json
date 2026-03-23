@@ -1,0 +1,20 @@
+[
+  {
+    "id": "LRYZRX6LZ3ZWTAN7QND4IT6V",
+    "type": "ITEM",
+    "version": 1772595270748,
+    "name": "Test Pizza (Demo)",
+    "price_money": null,
+    "modifier_list_info": [
+      "KISZZLVAS3BPW4HSMROAKDGB"
+    ]
+  },
+  {
+    "id": "KISZZLVAS3BPW4HSMROAKDGB",
+    "type": "MODIFIER_LIST",
+    "version": 1772595270748,
+    "name": "Toppings (Demo)",
+    "price_money": null,
+    "modifier_list_info": []
+  }
+]
