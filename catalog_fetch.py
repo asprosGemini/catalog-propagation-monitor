@@ -1,23 +1,40 @@
-import os
-from square import Square
-from square.environment import SquareEnvironment
+import sqlite3
 
-token = os.environ.get("SQUARE_ACCESS_TOKEN")
+DB_PATH = "catalog.db"
 
-client = Square(
-    environment=SquareEnvironment.SANDBOX,
-    token=token,
-)
 
-print("Fetching catalog objects...\n")
+def create_connection():
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        print(f"✅ Connected to SQLite database: {DB_PATH}")
+        return conn
+    except sqlite3.Error as e:
+        print("❌ SQLite connection error:", e)
+        return None
 
-count = 0
 
-for obj in client.catalog.list():
-    count += 1
-    print("\n--- Catalog Object ---")
-    print(f"ID: {obj.id}")
-    print(f"Type: {obj.type}")
-    print(f"Version: {obj.version}")
+def create_catalog_objects_table(conn):
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS catalog_objects (
+        id TEXT,
+        type TEXT,
+        version INTEGER,
+        name TEXT,
+        snapshot_type TEXT,
+        snapshot_time TEXT
+    );
+    """
 
-print(f"\nTotal catalog objects found: {count}")
+    cursor = conn.cursor()
+    cursor.execute(create_table_sql)
+    conn.commit()
+    print("✅ catalog_objects table is ready")
+
+
+if __name__ == "__main__":
+    conn = create_connection()
+
+    if conn:
+        create_catalog_objects_table(conn)
+        conn.close()
+        print("✅ Connection closed")
