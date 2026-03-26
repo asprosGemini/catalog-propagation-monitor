@@ -1,40 +1,29 @@
-import sqlite3
-
-DB_PATH = "catalog.db"
-
-
-def create_connection():
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        print(f"✅ Connected to SQLite database: {DB_PATH}")
-        return conn
-    except sqlite3.Error as e:
-        print("❌ SQLite connection error:", e)
-        return None
+import os
+from square import Square
+from square.environment import SquareEnvironment
 
 
-def create_catalog_objects_table(conn):
-    create_table_sql = """
-    CREATE TABLE IF NOT EXISTS catalog_objects (
-        id TEXT,
-        type TEXT,
-        version INTEGER,
-        name TEXT,
-        snapshot_type TEXT,
-        snapshot_time TEXT
-    );
-    """
+token = os.environ.get("SQUARE_ACCESS_TOKEN")
 
-    cursor = conn.cursor()
-    cursor.execute(create_table_sql)
-    conn.commit()
-    print("✅ catalog_objects table is ready")
+if not token:
+    print("❌ Missing SQUARE_ACCESS_TOKEN env var.")
+    raise SystemExit(1)
+
+client = Square(
+    environment=SquareEnvironment.SANDBOX,
+    token=token,
+)
+
+
+def fetch_catalog_objects():
+    objects = list(client.catalog.list())
+    print(f"✅ Fetched {len(objects)} catalog objects")
+
+    for obj in objects:
+        print(
+            f"id={obj.id} | type={obj.type} | version={obj.version}"
+        )
 
 
 if __name__ == "__main__":
-    conn = create_connection()
-
-    if conn:
-        create_catalog_objects_table(conn)
-        conn.close()
-        print("✅ Connection closed")
+    fetch_catalog_objects()
