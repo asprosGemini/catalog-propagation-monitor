@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from datetime import datetime
 
 DB_PATH = "catalog.db"
 SOURCE_SNAPSHOT_PATH = "snapshots/source_snapshot.json"
@@ -51,7 +52,7 @@ def load_source_snapshot_into_sqlite(conn):
                 obj.get("version"),
                 obj.get("name"),
                 "SOURCE",
-                None,
+                datetime.utcnow().isoformat(),
             )
         )
 
